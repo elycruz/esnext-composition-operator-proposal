@@ -291,5 +291,29 @@ as such statements return/yield a function (except for last )
 8.  Compositions require both their right and left values;  E.g., `left <| right`
 9.  Left most expression must yield functions.
 
-## Resources
-None so far.
+## Prior Art
+- fjl/compose - https://functional-jslib.github.io/fjl/module-function.html#.compose 
+- RamdaJs/compose - https://ramdajs.com/docs/#compose 
+- Plain old javascript function composition.
+- Haskell compose operator: http://hackage.haskell.org/package/base-4.11.1.0/docs/Prelude.html#g:12
+- Inline example:
+```
+const 
+
+    compose = (...args) => x => 
+        args.reduce((lastX, fn) => fn(x), args.shift()),
+        
+    op = x => x + x
+    
+;
+    
+// Proposed built-in
+op <| op <| op <| op(1) === 16
+
+// vs. (userland)
+compose(op, op, op, op)(1) === 16 
+
+// vs. (paranthesis counting)
+op(op(op(op(1)))) === 16
+    
+```
