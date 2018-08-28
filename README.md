@@ -41,7 +41,7 @@ const
     c = b,
     
     compose = (...args) => x => // In it's minimal definition (with no type checking)
-        args.reduce((lastX, fn) => fn(x), args.shift())
+        args.reduce((lastX, fn) => fn(lastX), x)
         
 ;
 
@@ -301,8 +301,8 @@ as such statements return/yield a function (except for last )
 ```
 const 
 
-    compose = (...args) => x => 
-        args.reduce((lastX, fn) => fn(x), args.shift()),
+    compose = (...funcs) => x => 
+        funcs.reduce((lastX, fn) => fn(lastX), x),
         
     op = x => x + x
     
