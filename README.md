@@ -1,5 +1,5 @@
 # esnext-composition-operator-proposal
-Javascript composition operator proposal (work-in-progress).
+Javascript composition operator proposal.
 
 
 ## Contents
@@ -16,7 +16,7 @@ Similar to "pipeline-operator-proposal" yet executes function
 composition in the same order/direction javascript already performs it;  
 E.g. from right to left:
 ```
-a( b( c )) === a <| b <| c
+a(b(c(d()))) === a <| b <| c <| d
 ```
 
 in essence the following, also, holds true  
