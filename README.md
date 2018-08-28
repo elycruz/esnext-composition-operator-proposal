@@ -8,7 +8,8 @@ Javascript composition operator proposal (work-in-progress).
 - [Syntax](#syntax)
 - [Usage Examples](#usage-examples)
 - [Formal Definition](#formal-definition)
-- [Resources](#resources)
+- [Prior Art](#prior-art)
+- [Proposal License](#proposal-license)
 
 ## Reasoning 
 Similar to "pipeline-operator-proposal" yet executes function
@@ -317,3 +318,6 @@ compose(op, op, op, op)(1) === 16
 op(op(op(op(1)))) === 16
     
 ```
+
+## Proposal License
+BSD-3-Clause
