@@ -1,5 +1,5 @@
 # esnext-composition-operator-proposal
-Javascript composition operator proposal (work-in-progress).
+Javascript composition operator proposal.
 
 
 ## Contents
