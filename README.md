@@ -19,86 +19,52 @@ E.g. from right to left:
 a(b(c(d()))) === a <| b <| c <| d
 ```
 
-in essence the following, also, holds true  
-```
-
-// Should pass with no error    
-assertEqual(
-    a(b(c(1))),
-    compose(a, b, c)(1),
-    (x => a(b(c(x)))(1)
-    a <| b <| c <| 1,
-);
-
-const
-    
-    id = x => x, 
-    
-    a = id, 
-    
-    b = a,
-     
-    c = b,
-    
-    compose = (...args) => x => // In it's minimal definition (with no type checking)
-        args.reduce((lastX, fn) => fn(lastX), x)
-        
-;
-
-function assertEqual (...args) {
-    const arg0 = args.shift();
-    args.forEach(x => {
-        if (x !== arg0) {
-            throw new Error(`Expected \`${x}\` to \`${arg0}\`.  Got: ...`);
-        } 
-    )
-}
-  
-```
-
 This proposal proposes keeping with javascript's (and many a language's) accepted "right-to-left" function composition format.
 
 **Note**: 
 This proposal only deals with the composition operator no other symbols are introduced for this proposal.
 
-
 ## Advantages
 Some advantages with continuing to do function composition in the 
 same order (direction) that javascript already performs them (even when adding a new operator) are:
-1.  No need to mix and match the way function composition occurs/is-defined (in code) (it happens in one direction already unless explicitly defined by user 
-    (by means already in the language (`reduce`/`reverse`, etc.) not via a new language feature)
-  ).
+1.  No need to mix and match the order in which function composition occurs/is-defined (in code) (it happens in one direction already unless explicitly defined by user (via `reverse`, `reduce` or other already existing functionality found in the language). 
 2.  Problems that were already solved with composing functions in the 'right-to-left' direction don't need to be solved again and problems arising from switching directions are never born.
 3.  We get to inherit the wealth of knowledge from other programming languages that do function composition/application
   in the same direction, already, (haskell, c++, scala, etc.).
- ## Syntax
+
+## Syntax
  
  ```
  statement <| statement <| statement?
  ```
  
- where `statement` is anything that yields a function (including a function itself).
+ where `statement` is anything that yields a function (including a function itself) and last statement is either something that yields a function (including a function) itself or any other value.
  
  ```
  (statement) instanceof Function === true 
+
+ // `statement?`
+ [undefined, null, '', 0, false, () => undefined, 'et. al.'].every(x => x === (statement?)) === true
  ```
  
- Essential property of composition operator:
+ Essential properties of composition operator:
  
  ```
  compose(a, b, c) === x => a(b(c(x))) &&
+ a <| b <| c === x => a(b(c(x))) // true
  
- a <| b <| c === x => a(b(c(x)))
+ a <| b <| === a(b()) // `true` // see next example
  ```
  
  The right-most `statement` in a composition operator statement can optionally be 
- any value (will force composed `function`'s execution if value is not a `function`):
+ any value (will force resulting composed `function`'s execution if value is not a `function`):
  
  ```
- compose(a, b, c)(1) !== a <| b <| c <| undefined
+ compose(a, b, c)(1) !== a <| b <| c <| 1 
  
- // Also note:
  (a <| b <| c)() === a <| b <| c <| undefined
+ 
+ (a <| b <| c)() === a <| b <| c <| 
  ```
  
  This should also be possible with this proposal:
@@ -111,7 +77,7 @@ same order (direction) that javascript already performs them (even when adding a
  In essence anything that yields a function can go on either the left, right, or both, sides of the composition operator.
 
 ## Usage Examples
-Here are some, more in-depth, example use cases using the "proposed" composition operator.
+Here are some, more in-depth, example use cases using the "proposed" compose operator.
 
 #### Functional usage example 1
 
@@ -287,10 +253,9 @@ log <| add(1) <| add(1) <| add(1) <| 2 // "5"
 ``` 
 
 6.  All rules for writing statements are allowed within function compositions so long
-as such statements return/yield a function (except for last )
-7.  All statements within a composition must yield a function unless that statement is the right most statement in the list of statements (in which case it is allowed to yield any value including `undefined` (which would be the same as executing compositions resulting function with the value `undefined`)).
-8.  Compositions require both their right and left values;  E.g., `left <| right`
-9.  Left most expression must yield functions.
+as such statements return/yield a function (except for last which can yield any values (as per next rule))
+7.  All statements within a compose composition must yield a function unless that statement is the right most statement in which case that statement can yield any value including a function. In the case that the last statement is not a `function` the compose composition will be executed immediately with the results of said statment passed in to resulting composition. 
+8.  Left most expression must yield/be a function.
 
 ## Prior Art
 - fjl/compose - https://functional-jslib.github.io/fjl/module-function.html#.compose 
