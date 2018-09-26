@@ -23,7 +23,7 @@ This proposal proposes keeping with javascript's (and many -a- "language"'s) acc
 
 ## Advantages
 Some advantages with continuing to do function composition in the 
-same order (direction) that javascript already performs them (even when adding a new operator) are:
+same order that javascript already performs it (even when adding a new operator) are:
 1.  No need to mix and match the order in which function composition occurs/is-defined (in code) (it happens in one direction already unless explicitly defined by user (via `reverse`, `reduce` or other already existing language constructs)
 2.  Problems that were already solved with composing functions in the 'right-to-left' direction don't need to be solved again and problems arising from switching directions are never born.
 3.  We get to inherit the wealth of knowledge from other programming languages that do function composition/application
@@ -234,7 +234,7 @@ export default toConfigOptions;
 
 ## Formal Definition
 The 'compose' operator...
-1.  Consists of a symbol containing two characters `<` and `|` next to each other with no space in between;  I.e., `<|`.
+1.  Consists of a symbol containing two characters `<` and `|` next to each other with no space in between;  I.e., `<|`;
 2.  Allows the user to create new functions/compositions by listing 2 or more functions separated by said operator.
 3.  Will, in turn, execute a composition if the last entry in said composition is not a function.
 4.  Will return a new function that will pass all incoming arguments to the right-most function in composition.
@@ -247,6 +247,7 @@ const
 ;
    
 log <| add(1) <| add(1) <| add(1) <| 2 // "5"
+log <| add(':c') <| add(':b') <| 'a' // 'a:b:c'
 ``` 
 
 6.  All rules for writing statements are allowed within function compositions so long
