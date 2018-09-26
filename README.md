@@ -79,24 +79,19 @@ Here are some, more in-depth, example use cases using the "proposed" 'compose' o
 #### Functional usage example 1
 
 ```
-// Old way (with no library)
-const someOp = namesAndPromisesList => Promise.all(
-  namesAndPromisesList.map(([n, p] => p.then(x => [n, x]))
-  )
-
-// New way (point-free - No need to decalre incoming variable due to 
-//  `<|` operator generating a new function, since we didn't pass in a 
-//  'non' function value at the end of the pipe.
-//  This new function will take any passed in args and pass them to the last 
-//  function in the pipe hence kicking off the pipe execution,
 import {map} from 'lodash/fp';  // import 'curried' `map` function 
- 
-// Transforms `Array<[String, Promise<Any>]>` to `Promise<[String, Any]>
-const someOp = Promise.all <| map(([n, p]) => p.then(x => [n, x]))
 
-// Much nicer!  And I didn't need to use `await` or generator functions within pipes, E.g., 
-// `a <| await b <| await c` bad composition (io actions/promises shouldn't be 
-//  composed with plain functions their values should be extracted and then be used in compositions. 
+// 'convert a names and promises associated list to a promise of names and resolved values list' 
+// Array<[String, Promise<Any>]>` to `Promise<[String, Any]>
+// Old way (with no library)
+const someOp = nsAndPsList => Promise.all(
+  map(([n, p] => p.then(x => [n, x]), nsAndPsList)
+  );
+
+// New way (point-free! - No need to decalre incoming variable due to 
+//  `<|` operator generating a new function.
+// `Array<[String, Promise<Any>]>` to `Promise<[String, Any]>
+const someOp = Promise.all <| map(([n, p]) => p.then(x => [n, x]))
 ```  
 
 #### Functional usage example 2:
@@ -115,7 +110,7 @@ const
   mat4 = (x, y, z, u) => ... // Lets say "produces a matrix of 4 components" (4x4 matrix)
   
   // Define a transformation
-  transformMat4Old = m => translate(rotate(peek(skew(scale(m))))),
+  transformMat4_old = m => translate(rotate(peek(skew(scale(m))))),
    
   // Define a transformation
   transformMat4 = translate <| rotate <| peek <| skew <| scale,
@@ -133,7 +128,7 @@ const
   // Elsewhere in code
   true === assertr(true) <| 
     shallowEquals(
-      transformMat4Old <| mat4(0, 0, 0, 0),
+      transformMat4_old <| mat4(0, 0, 0, 0),
       transformMat4 <| mat4(0, 0, 0, 0)
     ); // `true`
   
@@ -147,7 +142,7 @@ const
       const newMat4 = () => mat4(0.0, 0.0, 0.0, 0.0)
       expect(
         someOtherTransform(
-          transformMat4Old(
+          transformMat4_old(
             newMat4()
           )
         )
@@ -172,8 +167,8 @@ const
     describe ('#someTransform', () => {
       it ('Should do some transform', () => {
         expect().toEqual.apply(
-          expect <| someOtherTransform <| transformMat4Old <| newMat4(),
-          someOtherTransform <| peek <| transformMat4Old <| newMat4()
+          expect <| someOtherTransform <| transformMat4_old <| newMat4(),
+          someOtherTransform <| peek <| transformMat4_old <| newMat4()
         );
       });
     });
