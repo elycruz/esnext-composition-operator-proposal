@@ -21,9 +21,6 @@ a(b(c(d()))) === a <| b <| c <| d
 
 This proposal proposes keeping with javascript's (and many a language's) accepted "right-to-left" function composition format.
 
-**Note**: 
-This proposal only deals with the composition operator no other symbols are introduced for this proposal.
-
 ## Advantages
 Some advantages with continuing to do function composition in the 
 same order (direction) that javascript already performs them (even when adding a new operator) are:
