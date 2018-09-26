@@ -1,4 +1,4 @@
-# esnext-composition-operator-proposal
+# esnext-compose-operator-proposal
 Javascript composition operator proposal.
 
 
@@ -19,12 +19,12 @@ E.g. from right to left:
 a(b(c(d()))) === a <| b <| c <| d
 ```
 
-This proposal proposes keeping with javascript's (and many a language's) accepted "right-to-left" function composition format.
+This proposal proposes keeping with javascript's (and many -a- "language"'s) accepted "right-to-left" function composition format.
 
 ## Advantages
 Some advantages with continuing to do function composition in the 
 same order (direction) that javascript already performs them (even when adding a new operator) are:
-1.  No need to mix and match the order in which function composition occurs/is-defined (in code) (it happens in one direction already unless explicitly defined by user (via `reverse`, `reduce` or other already existing functionality found in the language). 
+1.  No need to mix and match the order in which function composition occurs/is-defined (in code) (it happens in one direction already unless explicitly defined by user (via `reverse`, `reduce` or other already existing language constructs)
 2.  Problems that were already solved with composing functions in the 'right-to-left' direction don't need to be solved again and problems arising from switching directions are never born.
 3.  We get to inherit the wealth of knowledge from other programming languages that do function composition/application
   in the same direction, already, (haskell, c++, scala, etc.).
@@ -35,7 +35,7 @@ same order (direction) that javascript already performs them (even when adding a
  statement <| statement <| statement?
  ```
  
- where `statement` is anything that yields a function (including a function itself) and last statement is either something that yields a function (including a function) itself or any other value.
+ where `statement` is anything that yields a function (including a function itself) and last statement is either something that yields a function (including a function itself) or any other value.
  
  ```
  (statement) instanceof Function === true 
@@ -44,16 +44,16 @@ same order (direction) that javascript already performs them (even when adding a
  [undefined, null, '', 0, false, () => undefined, 'et. al.'].every(x => x === (statement?)) === true
  ```
  
- Essential properties of composition operator:
+ Essential properties of 'compose' operator:
  
  ```
  compose(a, b, c) === x => a(b(c(x))) &&
  a <| b <| c === x => a(b(c(x))) // true
  
- a <| b <| === a(b()) // `true` // see next example
+ a <| b <| === a(b()) // `true` // see next example for more on this
  ```
  
- The right-most `statement` in a composition operator statement can optionally be 
+ The right-most `statement` in a 'compose' operator statement can optionally be 
  any value (will force resulting composed `function`'s execution if value is not a `function`):
  
  ```
@@ -71,10 +71,10 @@ same order (direction) that javascript already performs them (even when adding a
          await Promise.resolve(x => x + x) <|
          await Promise.resolve(x => x + x) <| 1
  ``` 
- In essence anything that yields a function can go on either the left, right, or both, sides of the composition operator.
+ In essence anything that yields a function can go on either the left, right, or both, sides of the 'compose' operator.
 
 ## Usage Examples
-Here are some, more in-depth, example use cases using the "proposed" compose operator.
+Here are some, more in-depth, example use cases using the "proposed" 'compose' operator.
 
 #### Functional usage example 1
 
@@ -233,7 +233,7 @@ export default toConfigOptions;
 ```
 
 ## Formal Definition
-The composition operator...
+The 'compose' operator...
 1.  Consists of a symbol containing two characters `<` and `|` next to each other with no space in between;  I.e., `<|`.
 2.  Allows the user to create new functions/compositions by listing 2 or more functions separated by said operator.
 3.  Will, in turn, execute a composition if the last entry in said composition is not a function.
@@ -251,14 +251,14 @@ log <| add(1) <| add(1) <| add(1) <| 2 // "5"
 
 6.  All rules for writing statements are allowed within function compositions so long
 as such statements return/yield a function (except for last which can yield any values (as per next rule))
-7.  All statements within a compose composition must yield a function unless that statement is the right most statement in which case that statement can yield any value including a function. In the case that the last statement is not a `function` the compose composition will be executed immediately with the results of said statment passed in to resulting composition. 
+7.  All statements within a compose composition must yield a function unless that statement is the right most statement in a 'compose' composition in which case that statement is allowed to yield any value including a function. In the case that the last statement is not a `function` the compose composition will be executed immediately with the results of said statment passed in to resulting composition. 
 8.  Left most expression must yield/be a function.
 
 ## Prior Art
 - fjl/compose - https://functional-jslib.github.io/fjl/module-function.html#.compose 
 - RamdaJs/compose - https://ramdajs.com/docs/#compose 
 - Plain old javascript function composition.
-- Haskell compose operator: http://hackage.haskell.org/package/base-4.11.1.0/docs/Prelude.html#g:12
+- Haskell 'compose' operator: http://hackage.haskell.org/package/base-4.11.1.0/docs/Prelude.html#g:12
 - Inline example:
 ```
 const 
