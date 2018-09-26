@@ -224,7 +224,7 @@ const toConfigOptions = ({
     }
     configsToMerge.push({}); // Object to merge on
     return 
-        jsonClone <| x => x[keyToExtract] || {} <|
+        jsonClone <| x => (x[keyToExtract] || {}) <|
         apply(assignDeep) <| reverse <| configsToMerge
     ;
 };
